@@ -1,0 +1,7 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "AccountEndpoint=https://cosmossqlapi1.documents.azure.com:443/;AccountKey=QFpn3MlN87rFPxiBwm4wLcmtqhfvjhIR0yghdbshViBzPRD4NQPNa2JzWnJB9bZkS7NWu8WqPqkkd6rUCn4Pmg==;",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet"
+  }
+}
