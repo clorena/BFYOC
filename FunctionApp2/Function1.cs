@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
+using FunctionApp2;
 
 namespace FunctionApp1
 {
@@ -147,6 +148,72 @@ namespace FunctionApp1
             }
 
             return new OkObjectResult(users);
+        }
+
+        [FunctionName("CreateRating")]
+        public static async Task<IActionResult> CreateRating(
+                [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
+                [CosmosDB(databaseName: "UserProduct",
+                collectionName: "ProductRatings",
+                CreateIfNotExists = true,
+                ConnectionStringSetting = "AzureWebJobsStorage")] IAsyncCollector<ProductRating> productRatings,
+                ILogger log)
+        {
+            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            var models = JsonConvert.DeserializeObject<IEnumerable<ProductRatingModel>>(requestBody);
+            log.LogInformation($"C# Queue trigger function processed {models?.Count()} items");
+
+            foreach (var model in models)
+            {
+                var pr = model.ToData();
+                await productRatings.AddAsync(pr);
+            }
+            return new OkObjectResult(true);
+        }
+
+        [FunctionName("GetRatings")]
+        public static async Task<IActionResult> GetRatings(
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "ratings")] HttpRequest req,
+            [CosmosDB(databaseName: "UserProduct", collectionName: "ProductRatings", SqlQuery = "SELECT p.Id, p.UserId, p.ProductId, p.LocationName, p.Rating, p.UserNotes, p.Timestamp FROM ProductRatings p",
+            ConnectionStringSetting = "AzureWebJobsStorage")] IEnumerable<ProductRating> users,
+            ILogger log)
+        {
+            log.LogInformation("C# HTTP trigger function processed a request.");
+
+            if (users is null)
+            {
+                return new NotFoundResult();
+            }
+
+            return new OkObjectResult(users);
+        }
+
+        [FunctionName("GetRating")]
+        public static async Task<IActionResult> GetRating(
+                [HttpTrigger(AuthorizationLevel.Function, "get", Route = "rating/{id}")] HttpRequest req,
+                [CosmosDB(databaseName: "UserProduct", collectionName: "ProductRatings", SqlQuery = "SELECT p.Id, p.UserId, p.ProductId, p.LocationName, p.Rating, p.UserNotes, p.Timestamp FROM ProductRatings p where p.Id = {id}",
+            ConnectionStringSetting = "AzureWebJobsStorage")] IEnumerable<ProductRating> users,
+                ILogger log)
+        {
+            log.LogInformation("C# HTTP trigger function processed a request.");
+
+            if (users is null)
+            {
+                return new NotFoundResult();
+            }
+
+            return new OkObjectResult(users);
+        }
+
+        public static ProductRating ToData(this ProductRatingModel model)
+        {
+            var productRating = new ProductRating() { Id = Guid.NewGuid(), Timestamp = DateTime.UtcNow };
+            productRating.UserId = model.UserId;
+            productRating.ProductId = model.ProductId;
+            productRating.LocationName = model.LocationName;
+            productRating.Rating = model.Rating;
+            productRating.UserNotes = model.UserNotes;           
+            return productRating;
         }
     }
 }
