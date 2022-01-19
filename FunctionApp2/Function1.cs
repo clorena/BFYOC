@@ -108,12 +108,12 @@ namespace FunctionApp1
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
-            if (products is null)
+            if (products.Count() == 0)
             {
                 return new NotFoundResult();
             }
 
-            return new OkObjectResult(products);
+            return new OkObjectResult(products.FirstOrDefault());
         }
 
         [FunctionName("GetUsers")]
@@ -142,12 +142,12 @@ namespace FunctionApp1
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
-            if (users is null)
+            if (users.Count() == 0)
             {
                 return new NotFoundResult();
             }
 
-            return new OkObjectResult(users);
+            return new OkObjectResult(users.FirstOrDefault());
         }
 
         [FunctionName("CreateRating")]
@@ -180,7 +180,7 @@ namespace FunctionApp1
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
-            if (users is null)
+            if (users.Count() == 0)
             {
                 return new NotFoundResult();
             }
@@ -197,12 +197,12 @@ namespace FunctionApp1
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
-            if (users is null)
+            if (users.Count() == 0)
             {
                 return new NotFoundResult();
             }
 
-            return new OkObjectResult(users);
+            return new OkObjectResult(users.FirstOrDefault());
         }
 
         public static ProductRating ToData(this ProductRatingModel model)
