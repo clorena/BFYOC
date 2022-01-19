@@ -47,7 +47,7 @@ namespace FunctionApp1
                 [CosmosDB(databaseName: "UserProduct",
                 collectionName: "Users",
                 CreateIfNotExists = true,
-                ConnectionStringSetting = "AzureWebJobsStorage")] IAsyncCollector<User> productItemsOut,
+                ConnectionStringSetting = "RatingsDb")] IAsyncCollector<User> productItemsOut,
                 ILogger log)
         {
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
@@ -67,7 +67,7 @@ namespace FunctionApp1
                 [CosmosDB(databaseName: "UserProduct",
                 collectionName: "Products",
                 CreateIfNotExists = true,
-                ConnectionStringSetting = "AzureWebJobsStorage")] IAsyncCollector<Product> productItemsOut,
+                ConnectionStringSetting = "RatingsDb")] IAsyncCollector<Product> productItemsOut,
                 ILogger log)
         {
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
@@ -86,7 +86,7 @@ namespace FunctionApp1
         public static async Task<IActionResult> GetProducts(
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = "products")] HttpRequest req,
             [CosmosDB(databaseName: "UserProduct", collectionName: "Products", SqlQuery = "SELECT * FROM Products",
-            ConnectionStringSetting = "AzureWebJobsStorage")] IEnumerable<Product> products,
+            ConnectionStringSetting = "RatingsDb")] IEnumerable<Product> products,
             ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
@@ -103,7 +103,7 @@ namespace FunctionApp1
         public static async Task<IActionResult> GetProduct(
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = "product/{id}")] HttpRequest req,
             [CosmosDB(databaseName: "UserProduct", collectionName: "Products", SqlQuery = "SELECT * FROM Products p where p.ProductId = {id}",
-            ConnectionStringSetting = "AzureWebJobsStorage")] IEnumerable<Product> products,
+            ConnectionStringSetting = "RatingsDb")] IEnumerable<Product> products,
             ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
@@ -120,7 +120,7 @@ namespace FunctionApp1
         public static async Task<IActionResult> GetUsers(
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = "users")] HttpRequest req,
             [CosmosDB(databaseName: "UserProduct", collectionName: "Users", SqlQuery = "SELECT * FROM Users",
-            ConnectionStringSetting = "AzureWebJobsStorage")] IEnumerable<User> users,
+            ConnectionStringSetting = "RatingsDb")] IEnumerable<User> users,
             ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
@@ -137,7 +137,7 @@ namespace FunctionApp1
         public static async Task<IActionResult> GetUser(
                 [HttpTrigger(AuthorizationLevel.Function, "get", Route = "user/{id}")] HttpRequest req,
                 [CosmosDB(databaseName: "UserProduct", collectionName: "Users", SqlQuery = "SELECT * FROM Users p where p.UserId = {id}",
-            ConnectionStringSetting = "AzureWebJobsStorage")] IEnumerable<User> users,
+            ConnectionStringSetting = "RatingsDb")] IEnumerable<User> users,
                 ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
@@ -156,7 +156,7 @@ namespace FunctionApp1
                 [CosmosDB(databaseName: "UserProduct",
                 collectionName: "ProductRatings",
                 CreateIfNotExists = true,
-                ConnectionStringSetting = "AzureWebJobsStorage")] IAsyncCollector<ProductRating> productRatings,
+                ConnectionStringSetting = "RatingsDb")] IAsyncCollector<ProductRating> productRatings,
                 ILogger log)
         {
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
@@ -175,7 +175,7 @@ namespace FunctionApp1
         public static async Task<IActionResult> GetRatings(
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = "ratings")] HttpRequest req,
             [CosmosDB(databaseName: "UserProduct", collectionName: "ProductRatings", SqlQuery = "SELECT p.Id, p.UserId, p.ProductId, p.LocationName, p.Rating, p.UserNotes, p.Timestamp FROM ProductRatings p",
-            ConnectionStringSetting = "AzureWebJobsStorage")] IEnumerable<ProductRating> users,
+            ConnectionStringSetting = "RatingsDb")] IEnumerable<ProductRating> users,
             ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
@@ -192,7 +192,7 @@ namespace FunctionApp1
         public static async Task<IActionResult> GetRating(
                 [HttpTrigger(AuthorizationLevel.Function, "get", Route = "rating/{id}")] HttpRequest req,
                 [CosmosDB(databaseName: "UserProduct", collectionName: "ProductRatings", SqlQuery = "SELECT p.Id, p.UserId, p.ProductId, p.LocationName, p.Rating, p.UserNotes, p.Timestamp FROM ProductRatings p where p.Id = {id}",
-            ConnectionStringSetting = "AzureWebJobsStorage")] IEnumerable<ProductRating> users,
+            ConnectionStringSetting = "RatingsDb")] IEnumerable<ProductRating> users,
                 ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
