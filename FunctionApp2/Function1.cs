@@ -161,7 +161,7 @@ namespace FunctionApp1
         {
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             var models = JsonConvert.DeserializeObject<IEnumerable<ProductRatingModel>>(requestBody);
-            log.LogInformation($"C# Queue trigger function processed {models?.Count()} items");
+            log.LogInformation($"C# Queue trigger function processed {models?.Count()} item");
 
             foreach (var model in models)
             {
